@@ -1,2 +1,3 @@
 rootProject.name = 'javaAlgorithms'
+include 'javaAlgorithmsLesson3'
 
