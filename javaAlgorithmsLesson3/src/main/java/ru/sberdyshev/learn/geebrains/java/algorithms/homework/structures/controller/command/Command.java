@@ -60,7 +60,14 @@ public class Command {
             }
         }
 
-        return checkArgsAmount(argsAmount, type);
+//        return checkArgsAmount(argsAmount, type);
+        if (argsAmount == type.getArgsAmount()) {
+            logger.debug("Command type {}. Amount of params {}. Expected amount {}. Arguments are correct.", type, argsAmount, type.getArgsAmount());
+            return true;
+        } else {
+            logger.debug("Command type {}. Amount of params {}. Expected amount {}. Arguments are not correct.", type, argsAmount, type.getArgsAmount());
+            return false;
+        }
 //        switch (type) {
 //            case CREATE_STACK:
 //                return checkArgsAmount(argsAmount, CREATE_STACK);
@@ -162,16 +169,15 @@ public class Command {
 //                logger.error(illegalArgumentException.getLocalizedMessage(), illegalArgumentException);
 //                break;
 //        }
-        return true;
     }
 
-    private boolean checkArgsAmount(int argsAmount, CommandType commandType) {
-        if (argsAmount == commandType.getArgsAmount()) {
-            logger.debug("Command type {}. Amount of params {}. Expected amount {}. Arguments are correct.", commandType, argsAmount, commandType.getArgsAmount());
-            return true;
-        } else {
-            logger.debug("Command type {}. Amount of params {}. Expected amount {}. Arguments are not correct.", commandType, argsAmount, commandType.getArgsAmount());
-            return false;
-        }
-    }
+//    private boolean checkArgsAmount(int argsAmount, CommandType commandType) {
+//        if (argsAmount == commandType.getArgsAmount()) {
+//            logger.debug("Command type {}. Amount of params {}. Expected amount {}. Arguments are correct.", commandType, argsAmount, commandType.getArgsAmount());
+//            return true;
+//        } else {
+//            logger.debug("Command type {}. Amount of params {}. Expected amount {}. Arguments are not correct.", commandType, argsAmount, commandType.getArgsAmount());
+//            return false;
+//        }
+//    }
 }
