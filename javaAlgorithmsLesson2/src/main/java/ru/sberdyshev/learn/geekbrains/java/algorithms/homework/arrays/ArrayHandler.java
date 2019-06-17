@@ -1,5 +1,7 @@
 package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lombok.Getter;
 
 import java.lang.reflect.Array;
@@ -12,6 +14,7 @@ import java.util.List;
  * @author sberdyshev
  */
 public class ArrayHandler<T extends Comparable<T>> {
+    private static final Logger logger = LoggerFactory.getLogger(ArrayHandler.class);
     private static final int ARRAY_MIN_LENGTH = 5;
     private final Class<T> classType;
     @Getter
@@ -35,6 +38,7 @@ public class ArrayHandler<T extends Comparable<T>> {
         for (T currentElement : elements) {
             this.add(currentElement);
         }
+        logger.info("An object has been created with predefined elements: {}", elements);
     }
 
     /**
@@ -47,6 +51,7 @@ public class ArrayHandler<T extends Comparable<T>> {
         this.classType = classType;
         this.array = array;
         this.currentPosition = 0;
+        logger.info("An object has been created");
     }
 
     /**
@@ -56,7 +61,9 @@ public class ArrayHandler<T extends Comparable<T>> {
      * @return true if there was an addition, false in other case
      */
     public boolean add(T addedElement) {
+        logger.info("Adding element {}", addedElement);
         if (array.length == currentPosition) {
+            logger.info("The array is full, giving it new length - {}", 2 * array.length);
             T[] tempArray = (T[]) Array.newInstance(classType, 2 * array.length);
             for (int i = 0; i < array.length; i++) {
                 tempArray[i] = array[i];
@@ -75,6 +82,7 @@ public class ArrayHandler<T extends Comparable<T>> {
      * @return true if there was a deletion, false in other case
      */
     public boolean delete(T deletedElement) {
+        logger.info("Deleting element {}", deletedElement);
         boolean result = false;
         T[] tempArray = array;
         List<Integer> undeletedIndexes = new LinkedList<Integer>();
@@ -95,6 +103,7 @@ public class ArrayHandler<T extends Comparable<T>> {
         if (remainedElementAmount != tempArray.length) {
             result = true;
         }
+        logger.info("Creating new array without deleted {} elements", array.length - remainedElementAmount);
         if (remainedElementAmount != 0) {
             array = (T[]) Array.newInstance(classType, remainedElementAmount);
             int i = 0;
@@ -103,6 +112,7 @@ public class ArrayHandler<T extends Comparable<T>> {
                 i++;
             }
         } else {
+            logger.info("There is no elements left. Creating an empty array with the default size");
             array = (T[]) Array.newInstance(classType, ARRAY_MIN_LENGTH);
         }
         return result;
@@ -115,6 +125,7 @@ public class ArrayHandler<T extends Comparable<T>> {
      * @return position of the found element, -1 otherwise
      */
     public int find(T searchedElement) {
+        logger.info("Searching for an element {}", searchedElement);
         int defPosition = -1;
         if (searchedElement == null) {
             for (int i = 0; i < array.length; i++) {
@@ -134,6 +145,7 @@ public class ArrayHandler<T extends Comparable<T>> {
      * Prints all elements one in a line with separation lines
      */
     public void print() {
+        logger.info("Printing the array [{}]", array);
         System.out.print("-- ");
         for (T checkedElement : array) {
             System.out.print(checkedElement + " ");
@@ -146,6 +158,7 @@ public class ArrayHandler<T extends Comparable<T>> {
      * NULLs are considered the biggest.
      */
     public void sortBubble() {
+        logger.info("Start sorting by bubble algorithm array [{}]", array);
         for (int i = array.length - 1; i >= 1; i--) {
             for (int j = 0; j < i; j++) {
                 if (array[j] == null && array[j + 1] != null) {
@@ -157,6 +170,7 @@ public class ArrayHandler<T extends Comparable<T>> {
                 }
             }
         }
+        logger.info("Finish sorting by bubble algorithm array [{}]", array);
     }
 
     /**
@@ -176,6 +190,7 @@ public class ArrayHandler<T extends Comparable<T>> {
      * NULLs are considered the biggest.
      */
     public void sortSelect() {
+        logger.info("Start sorting by select algorithm array [{}]", array);
         int out, in, mark;
         for (out = 0; out < array.length; out++) {
             mark = out;
@@ -190,6 +205,7 @@ public class ArrayHandler<T extends Comparable<T>> {
             }
             change(out, mark);
         }
+        logger.info("Finish sorting by bubble algorithm array [{}]", array);
     }
 
     /**
@@ -197,6 +213,7 @@ public class ArrayHandler<T extends Comparable<T>> {
      * NULLs are considered the biggest.
      */
     public void sortInsert() {
+        logger.info("Start sorting by insert algorithm array [{}]", array);
         int in, out;
         for (out = 1; out < array.length; out++) {
             T temp = array[out];
@@ -207,5 +224,6 @@ public class ArrayHandler<T extends Comparable<T>> {
             }
             array[in] = temp;
         }
+        logger.info("Finish sorting by insert algorithm array [{}]", array);
     }
 }
