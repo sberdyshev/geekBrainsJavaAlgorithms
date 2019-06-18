@@ -6,6 +6,7 @@ import ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.control
 import ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.controller.command.CommandType;
 import ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.queue.Queue;
 import ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.stack.Stack;
+import ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.stack.StackImpl;
 
 import java.util.*;
 
@@ -26,7 +27,7 @@ public class StructuresAppCliController implements CLIController {
 
     @Override
     public void start() throws IllegalStateException {
-        logger.debug("StudentAppCLIController started");
+        logger.debug("StructuresAppCliController started");
         Scanner scanner = new Scanner(System.in);
         boolean isExit = false;
         int tryCount = 0;
@@ -39,117 +40,94 @@ public class StructuresAppCliController implements CLIController {
                 showWrongArgsMessage();
                 tryCount += 1;
             } else {
+                logger.debug("Choosed {}", command.getType().getCommandShortDescr());
                 switch (command.getType()) {
                     case EXIT:
-                        logger.debug("Choosed EXIT");
                         processExit();
                         isExit = true;
                         break;
                     case CREATE_STACK: {
                         tryCount = 0;
-                        logger.debug("Choosed CREATE_STACK, tryCount = {}", tryCount);
-                        (command);
+                        processCreateStack(command);
                         break;
                     }
                     case DELETE_STACK: {
                         tryCount = 0;
-                        logger.debug("Choosed DELETE_STACK, tryCount = {}", tryCount);
-                        (command);
+                        processDeleteStack(command);
                         break;
                     }
                     case SHOW_STACK_LIST: {
                         tryCount = 0;
-                        logger.debug("Choosed SHOW_STACK_LIST, tryCount = {}", tryCount);
-                        (command);
+                        processShowStackList(command);
                         break;
                     }
                     case PUSH_INTO_STACK: {
                         tryCount = 0;
-                        logger.debug("Choosed PUSH_INTO_STACK, tryCount = {}", tryCount);
-                        (command);
+                        processPushIntoStack(command);
                         break;
                     }
                     case POP_FROM_STACK: {
                         tryCount = 0;
-                        logger.debug("Choosed POP_FROM_STACK, tryCount = {}", tryCount);
-                        (command);
+                        processPopFromStack(command);
                         break;
                     }
                     case PEEK_IN_STACK: {
                         tryCount = 0;
-                        logger.debug("Choosed PEEK_IN_STACK, tryCount = {}", tryCount);
-                        (command);
+                        processPeekInStack(command);
                         break;
                     }
                     case PRINT_STACK: {
                         tryCount = 0;
-                        logger.debug("Choosed PRINT_STACK, tryCount = {}", tryCount);
-                        (command);
+                        processPrintStack(command);
                         break;
                     }
-                    case PRINT_STACK_SIZE: {
+                    case SHOW_STACK_SIZE: {
                         tryCount = 0;
-                        logger.debug("Choosed PRINT_STACK_SIZE, tryCount = {}", tryCount);
-                        (command);
+                        processShowStackSize(command);
                         break;
                     }
                     case CREATE_QUEUE: {
                         tryCount = 0;
-                        logger.debug("Choosed CREATE_QUEUE, tryCount = {}", tryCount);
-                        (command);
+                        processCreateQueue(command);
                         break;
                     }
                     case DELETE_QUEUE: {
                         tryCount = 0;
-                        logger.debug("Choosed DELETE_QUEUE, tryCount = {}", tryCount);
-                        (command);
+                        processDeleteQueue(command);
                         break;
                     }
                     case SHOW_QUEUE_LIST: {
                         tryCount = 0;
-                        logger.debug("Choosed SHOW_QUEUE_LIST, tryCount = {}", tryCount);
-                        (command);
+                        processShowQueueList(command);
                         break;
                     }
                     case WRITE_INTO_QUEUE: {
                         tryCount = 0;
-                        logger.debug("Choosed WRITE_INTO_QUEUE, tryCount = {}", tryCount);
-                        (command);
+                        processWriteIntoQueue(command);
                         break;
                     }
                     case READ_FROM_QUEUE: {
                         tryCount = 0;
-                        logger.debug("Choosed READ_FROM_QUEUE, tryCount = {}", tryCount);
-                        (command);
+                        processReadFromQueue(command);
                         break;
                     }
                     case BROWSE_QUEUE: {
                         tryCount = 0;
-                        logger.debug("Choosed BROWSE_QUEUE, tryCount = {}", tryCount);
-                        (command);
+                        processBrowseQueue(command);
                         break;
                     }
                     case PRINT_QUEUE: {
                         tryCount = 0;
-                        logger.debug("Choosed PRINT_QUEUE, tryCount = {}", tryCount);
-                        (command);
+                        processPrintQueue(command);
                         break;
                     }
-                    case PRINT_QUEUE_SIZE: {
+                    case SHOW_QUEUE_SIZE: {
                         tryCount = 0;
-                        logger.debug("Choosed PRINT_QUEUE_SIZE, tryCount = {}", tryCount);
-                        (command);
-                        break;
-                    }
-                    case : {
-                        tryCount = 0;
-                        logger.debug("Choosed , tryCount = {}", tryCount);
-                        (command);
+                        processShowQueueSize(command);
                         break;
                     }
                     case HELP: {
                         tryCount = 0;
-                        logger.debug("Choosed HELP, tryCount = {}", tryCount);
                         processHelp();
                         break;
                     }
@@ -169,6 +147,146 @@ public class StructuresAppCliController implements CLIController {
         } while (!isExit);
     }
 
+    private void processCreateStack(Command command) {
+        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        String newStackName = command.getArgAtPos(0);
+        if (stacks.containsKey(newStackName)) {
+            logger.warn("Stack list already has {} stack. Try deleting it first. Aborting.", newStackName);
+            System.out.println("Stack list already has " + newStackName + " stack. Try deleting it first. Aborting.");
+        } else {
+            Stack<String> newStack = new StackImpl<>(String.class, newStackName);
+            stacks.put(newStackName, newStack);
+            logger.debug("Stack with name {} added to stack list.", newStackName);
+        }
+        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+    }
+
+    private void processDeleteStack(Command command) {
+        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        String deleteStackName = command.getArgAtPos(0);
+        Stack<String> removedStack = stacks.remove(deleteStackName);
+        if (removedStack != null) {
+            logger.debug("Stack with name {} deleted from stack list.", deleteStackName);
+        } else {
+            logger.debug("Stack with name {} hasn't been found in stack list.");
+        }
+        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+    }
+
+    private void processShowStackList(Command command) {
+        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        System.out.println("-----------------------");
+        System.out.println("Stack list:");
+        stacks.forEach((stackName, stack) -> System.out.println(stackName));
+        System.out.println("-----------------------");
+        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+    }
+
+    private void processPushIntoStack(Command command) {
+        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        String stackName = command.getArgAtPos(0);
+        String valueToPush = command.getArgAtPos(1);
+        Stack<String> stack = stacks.get(stackName);
+        if (stack != null) {
+            stack.push(valueToPush);
+        } else {
+            logger.warn("There is no stack with name {}.", stackName);
+            System.out.println("There is no stack with name " + stackName + ".");
+        }
+        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+    }
+
+    private void processPopFromStack(Command command) {
+        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        String stackName = command.getArgAtPos(0);
+        Stack<String> stack = stacks.get(stackName);
+        if (stack != null) {
+            String resultValue = stack.pop();
+            System.out.println("Read a value from the stack " + stackName + ": " + resultValue + "");
+            logger.debug("Read a value from the stack " + stackName + ": " + resultValue + "");
+        } else {
+            logger.warn("There is no stack with name {}.", stackName);
+            System.out.println("There is no stack with name " + stackName + ".");
+        }
+        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+    }
+
+    private void processPeekInStack(Command command) {
+        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        String stackName = command.getArgAtPos(0);
+        Stack<String> stack = stacks.get(stackName);
+        if (stack != null) {
+            String resultValue = stack.peek();
+            System.out.println("Read a value from the stack " + stackName + ": " + resultValue + "");
+            logger.debug("Read a value from the stack " + stackName + ": " + resultValue + "");
+        } else {
+            logger.warn("There is no stack with name {}.", stackName);
+            System.out.println("There is no stack with name " + stackName + ".");
+        }
+        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+    }
+
+    private void processPrintStack(Command command) {
+        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        String stackName = command.getArgAtPos(0);
+        Stack<String> stack = stacks.get(stackName);
+        if (stack != null) {
+            if (!stack.isEmpty()) {
+                List<String> stackValues = stack.getValues();
+                System.out.println("Stack \"" + stackName + "\" values:");
+                System.out.println("-----------------------");
+                for (String value : stackValues) {
+                    System.out.println(value);
+                }
+                System.out.println("-----------------------");
+            } else {
+                System.out.println("Stack \"" + stackName + "\" is empty.");
+            }
+        } else {
+            logger.warn("There is no stack with name {}.", stackName);
+            System.out.println("There is no stack with name " + stackName + ".");
+        }
+        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+    }
+
+    private void processShowStackSize(Command command) {
+        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        String stackName = command.getArgAtPos(0);
+        Stack<String> stack = stacks.get(stackName);
+        if (stack != null) {
+            int stackSize = stack.getSize();
+            System.out.println("Stack \"" + stackName + "\" has size: " + stackSize + ".");
+        } else {
+            logger.warn("There is no stack with name {}.", stackName);
+            System.out.println("There is no stack with name " + stackName + ".");
+        }
+        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+    }
+
+    private void processDeleteQueue(Command command) {
+    }
+
+    private void processCreateQueue(Command command) {
+    }
+
+    private void processShowQueueList(Command command) {
+    }
+
+    private void processWriteIntoQueue(Command command) {
+    }
+
+    private void processReadFromQueue(Command command) {
+    }
+
+    private void processBrowseQueue(Command command) {
+    }
+
+    private void processPrintQueue(Command command) {
+    }
+
+    private void processShowQueueSize(Command command) {
+    }
+
     @Override
     public Command parse(String line) {
         logger.debug("Parsing line: {}", line);
@@ -176,9 +294,9 @@ public class StructuresAppCliController implements CLIController {
             if (commandType.equals(CommandType.NONE)) {
                 continue;
             }
-            boolean lineStartsWithCurrentCommand = line.startsWith(commandType.getCommandName());
-            boolean commandHasArgs = line.length() > commandType.getCommandName().length();
-            boolean commandSeparatedFromArgsWithSpace = line.startsWith(commandType.getCommandName() + " ");
+            boolean lineStartsWithCurrentCommand = line.startsWith(commandType.getCommand());
+            boolean commandHasArgs = line.length() > commandType.getCommand().length();
+            boolean commandSeparatedFromArgsWithSpace = line.startsWith(commandType.getCommand() + " ");
             if (lineStartsWithCurrentCommand) {
                 if (!commandHasArgs || (commandHasArgs && commandSeparatedFromArgsWithSpace)) {
                     List<String> args = getArgs(line, commandType);
@@ -195,7 +313,7 @@ public class StructuresAppCliController implements CLIController {
 
     private List<String> getArgs(String line, CommandType commandType) {
         List<String> args = new ArrayList<>();
-        int commandLength = commandType.getCommandName().length();
+        int commandLength = commandType.getCommand().length();
         String lineWithoutCommand;
         if (commandLength < line.length()) {
             lineWithoutCommand = line.substring(commandLength);

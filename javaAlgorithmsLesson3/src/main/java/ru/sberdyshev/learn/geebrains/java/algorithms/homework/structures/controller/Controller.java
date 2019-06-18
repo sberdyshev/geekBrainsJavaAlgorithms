@@ -6,5 +6,4 @@ package ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.contro
 public interface Controller {
     void showCommands();
     void start();
-    void end();
 }

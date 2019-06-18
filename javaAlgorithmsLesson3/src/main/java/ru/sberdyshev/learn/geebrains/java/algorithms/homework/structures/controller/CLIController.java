@@ -23,7 +23,7 @@ public interface CLIController extends Controller {
     }
 
     default void showWrongCommandMessage() {
-        System.out.println("Wrong command. Try " + CommandType.HELP.getCommandName());
+        System.out.println("Wrong command. Try " + CommandType.HELP.getCommand());
     }
 
     default void showHelpMessage() {
@@ -36,7 +36,7 @@ public interface CLIController extends Controller {
         CommandType[] commandList = CommandType.values();
         for (CommandType commandType : commandList) {
             if (commandType != CommandType.NONE) {
-                System.out.println("Command: " + commandType.getCommandName() + ". Description: " + commandType.getCommandDescr());
+                System.out.println("Command: " + commandType.getCommand() + ". Description: " + commandType.getCommandDescr());
             }
         }
     }
