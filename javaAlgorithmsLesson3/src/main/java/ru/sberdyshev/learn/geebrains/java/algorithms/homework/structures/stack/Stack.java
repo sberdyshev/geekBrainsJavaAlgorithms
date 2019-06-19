@@ -14,4 +14,6 @@ public interface Stack<T> {
     List<T> getValues();
 
     int getSize();
+
+    void clear();
 }
