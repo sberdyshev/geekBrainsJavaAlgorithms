@@ -3,6 +3,11 @@ package ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.contro
 import ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.controller.command.Command;
 import ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.controller.command.CommandType;
 
+/**
+ * CLI Controller API
+ *
+ * @author sberdyshev
+ */
 public interface CLIController extends Controller {
     Command parse(String line);
 

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.controller.command.Command;
 import ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.controller.command.CommandType;
 import ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.queue.Queue;
+import ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.queue.QueueImpl;
 import ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.stack.Stack;
 import ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.stack.StackImpl;
 
@@ -40,7 +41,7 @@ public class StructuresAppCliController implements CLIController {
                 showWrongArgsMessage();
                 tryCount += 1;
             } else {
-                logger.debug("Choosed {}", command.getType().getCommandShortDescr());
+                logger.debug("Choosed \"{}\"", command.getType().getCommandShortDescr());
                 switch (command.getType()) {
                     case EXIT:
                         processExit();
@@ -133,7 +134,7 @@ public class StructuresAppCliController implements CLIController {
                     }
                     case NONE: {
                         tryCount += 1;
-                        logger.debug("Wrong command, tryCount = {}", tryCount);
+                        logger.debug("Wrong command, tryCount = \"{}\"", tryCount);
                         isExit = processWrongCommand(tryCount);
                         break;
                     }
@@ -148,125 +149,152 @@ public class StructuresAppCliController implements CLIController {
     }
 
     private void processCreateStack(Command command) {
-        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
         String newStackName = command.getArgAtPos(0);
         if (stacks.containsKey(newStackName)) {
-            logger.warn("Stack list already has {} stack. Try deleting it first. Aborting.", newStackName);
-            System.out.println("Stack list already has " + newStackName + " stack. Try deleting it first. Aborting.");
+            logger.warn("Stack list already has \"{}\" stack. Try deleting it first. Aborting.", newStackName);
+            System.out.println("Stack list already has \"" + newStackName + "\" stack. Try deleting it first. Aborting.");
         } else {
             Stack<String> newStack = new StackImpl<>(String.class, newStackName);
             stacks.put(newStackName, newStack);
-            logger.debug("Stack with name {} added to stack list.", newStackName);
+            logger.debug("Stack with name \"{}\" added to stack list.", newStackName);
+            System.out.println("Stack with name \"" + newStackName + "\" added to stack list.");
         }
-        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processDeleteStack(Command command) {
-        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
         String deleteStackName = command.getArgAtPos(0);
         Stack<String> removedStack = stacks.remove(deleteStackName);
         if (removedStack != null) {
-            logger.debug("Stack with name {} deleted from stack list.", deleteStackName);
+            logger.debug("Stack with name \"{}\" deleted from stack list.", deleteStackName);
+            System.out.println("Stack with name \"" + deleteStackName + "\" deleted from stack list.");
         } else {
-            logger.debug("Stack with name {} hasn't been found in stack list.");
+            logger.debug("Stack with name \"{}\" hasn't been found in stack list.", deleteStackName);
+            System.out.println("Stack with name \"" + deleteStackName + "\" hasn't been found in stack list.");
         }
-        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processShowStackList(Command command) {
-        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
         System.out.println("-----------------------");
         System.out.println("Stack list:");
+        System.out.println("-----------------------");
         stacks.forEach((stackName, stack) -> System.out.println(stackName));
         System.out.println("-----------------------");
-        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processPushIntoStack(Command command) {
-        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
         String stackName = command.getArgAtPos(0);
         String valueToPush = command.getArgAtPos(1);
         Stack<String> stack = stacks.get(stackName);
         if (stack != null) {
             stack.push(valueToPush);
+            System.out.println("A value \"" + valueToPush + "\" has been pushed to stack \"" + stackName + "\".");
         } else {
-            logger.warn("There is no stack with name {}.", stackName);
-            System.out.println("There is no stack with name " + stackName + ".");
+            logger.warn("There is no stack with name \"{}\".", stackName);
+            System.out.println("There is no stack with name \"" + stackName + "\".");
         }
-        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processPopFromStack(Command command) {
-        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
         String stackName = command.getArgAtPos(0);
         Stack<String> stack = stacks.get(stackName);
         if (stack != null) {
-            String resultValue = stack.pop();
-            System.out.println("Read a value from the stack " + stackName + ": " + resultValue + "");
-            logger.debug("Read a value from the stack " + stackName + ": " + resultValue + "");
+            if (stack.isEmpty()) {
+                System.out.println("Stack \"" + stackName + "\" is empty.");
+                logger.debug("Stack \"" + stackName + "\" is empty.");
+            } else {
+                String resultValue = stack.pop();
+                System.out.println("Read a value from the stack \"" + stackName + "\": \"" + resultValue + "\".");
+                logger.debug("Read a value from the stack \"" + stackName + "\": \"" + resultValue + "\".");
+            }
         } else {
-            logger.warn("There is no stack with name {}.", stackName);
-            System.out.println("There is no stack with name " + stackName + ".");
+            logger.warn("There is no stack with name \"{}\".", stackName);
+            System.out.println("There is no stack with name \"" + stackName + "\".");
         }
-        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processPeekInStack(Command command) {
-        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
         String stackName = command.getArgAtPos(0);
         Stack<String> stack = stacks.get(stackName);
         if (stack != null) {
-            String resultValue = stack.peek();
-            System.out.println("Read a value from the stack " + stackName + ": " + resultValue + "");
-            logger.debug("Read a value from the stack " + stackName + ": " + resultValue + "");
+            if (stack.isEmpty()) {
+                System.out.println("Stack \"" + stackName + "\" is empty.");
+                logger.debug("Stack \"" + stackName + "\" is empty.");
+            } else {
+                String resultValue = stack.peek();
+                System.out.println("Read a value from the stack \"" + stackName + "\": \"" + resultValue + "\".");
+                logger.debug("Read a value from the stack \"" + stackName + "\": \"" + resultValue + "\".");
+            }
         } else {
-            logger.warn("There is no stack with name {}.", stackName);
-            System.out.println("There is no stack with name " + stackName + ".");
+            logger.warn("There is no stack with name \"{}\".", stackName);
+            System.out.println("There is no stack with name \"" + stackName + "\".");
         }
-        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processPrintStack(Command command) {
-        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
         String stackName = command.getArgAtPos(0);
         Stack<String> stack = stacks.get(stackName);
         if (stack != null) {
             if (!stack.isEmpty()) {
                 List<String> stackValues = stack.getValues();
+                System.out.println("-----------------------");
                 System.out.println("Stack \"" + stackName + "\" values:");
                 System.out.println("-----------------------");
                 for (String value : stackValues) {
-                    System.out.println(value);
+                    System.out.print(value + " ");
                 }
-                System.out.println("-----------------------");
+                System.out.println("\r\n-----------------------");
             } else {
                 System.out.println("Stack \"" + stackName + "\" is empty.");
             }
         } else {
-            logger.warn("There is no stack with name {}.", stackName);
-            System.out.println("There is no stack with name " + stackName + ".");
+            logger.warn("There is no stack with name \"{}\".", stackName);
+            System.out.println("There is no stack with name \"" + stackName + "\".");
         }
-        logger.debug("Processed {}", command.getType().getCommandShortDescr());
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processShowStackSize(Command command) {
-        logger.debug("Processing {}", command.getType().getCommandShortDescr());
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
         String stackName = command.getArgAtPos(0);
         Stack<String> stack = stacks.get(stackName);
         if (stack != null) {
             int stackSize = stack.getSize();
             System.out.println("Stack \"" + stackName + "\" has size: " + stackSize + ".");
         } else {
-            logger.warn("There is no stack with name {}.", stackName);
-            System.out.println("There is no stack with name " + stackName + ".");
+            logger.warn("There is no stack with name \"{}\".", stackName);
+            System.out.println("There is no stack with name \"" + stackName + "\".");
         }
-        logger.debug("Processed {}", command.getType().getCommandShortDescr());
-    }
-
-    private void processDeleteQueue(Command command) {
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processCreateQueue(Command command) {
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        String newQueueName = command.getArgAtPos(0);
+        if (queues.containsKey(newQueueName)) {
+            logger.warn("Queue list already has \"{}\" queue. Try deleting it first. Aborting.", newQueueName);
+            System.out.println("Queue list already has \"" + newQueueName + "\" queue. Try deleting it first. Aborting.");
+        } else {
+            Queue<String> newQueue = new QueueImpl<>(String.class, newQueueName);
+            queues.put(newQueueName, newQueue);
+            logger.debug("Queue with name \"{}\" added to queue list.", newQueueName);
+        }
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+    }
+
+    private void processDeleteQueue(Command command) {
     }
 
     private void processShowQueueList(Command command) {
@@ -289,7 +317,7 @@ public class StructuresAppCliController implements CLIController {
 
     @Override
     public Command parse(String line) {
-        logger.debug("Parsing line: {}", line);
+        logger.debug("Parsing line: \"{}\"", line);
         for (CommandType commandType : CommandType.values()) {
             if (commandType.equals(CommandType.NONE)) {
                 continue;
@@ -300,8 +328,8 @@ public class StructuresAppCliController implements CLIController {
             if (lineStartsWithCurrentCommand) {
                 if (!commandHasArgs || (commandHasArgs && commandSeparatedFromArgsWithSpace)) {
                     List<String> args = getArgs(line, commandType);
-                    logger.debug("Command type: {}", commandType);
-                    logger.debug("Arguments: {}", args);
+                    logger.debug("Command type: \"{}\"", commandType);
+                    logger.debug("Arguments: \"{}\"", args);
                     return new Command(commandType, args);
                 } else {
                     break;

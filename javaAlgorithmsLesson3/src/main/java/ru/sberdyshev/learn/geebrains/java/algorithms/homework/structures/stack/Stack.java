@@ -2,6 +2,12 @@ package ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.stack;
 
 import java.util.List;
 
+/**
+ * Stack API
+ *
+ * @param <T> - type of values stack can contain
+ * @author sberdyshev
+ */
 public interface Stack<T> {
     T pop();
 

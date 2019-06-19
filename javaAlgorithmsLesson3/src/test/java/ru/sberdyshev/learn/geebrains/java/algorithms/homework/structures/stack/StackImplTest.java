@@ -1,9 +1,8 @@
 package ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.stack;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,26 +11,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author sberdyshev
  */
 class StackImplTest {
-    private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private static final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-    private static final PrintStream originalOut = System.out;
-    private static final PrintStream originalErr = System.err;
     private static Stack<String> stackString;
     private static Stack<Integer> stackInteger;
     private static Stack<String> stackStringEmpty;
     private static Stack<Integer> stackIntegerEmpty;
-
-    @BeforeAll
-    public static void setUpStreams() {
-        System.setOut(new PrintStream(outContent));
-        System.setErr(new PrintStream(errContent));
-    }
-
-    @AfterAll
-    public static void restoreStreams() {
-        System.setOut(originalOut);
-        System.setErr(originalErr);
-    }
 
     @BeforeEach
     public void setUpTest() {
@@ -39,11 +22,6 @@ class StackImplTest {
         stackStringEmpty = new StackImpl<>(String.class, "String empty stack");
         stackInteger = new StackImpl<>(Integer.class, "Integer stack", 10, 59, 1111, 123);
         stackIntegerEmpty = new StackImpl<>(Integer.class, "Integer empty stack");
-    }
-
-    @AfterEach
-    public void resetOutputStream() {
-        outContent.reset();
     }
 
     @Test
@@ -335,5 +313,39 @@ class StackImplTest {
         Integer expectedValue = 0;
         Integer actualValue = stackIntegerEmpty.getSize();
         assertEquals(expectedValue, actualValue);
+    }
+
+    @Test
+    void clearIntegerStack() {
+        Integer expectedValueFirstIteration = 123;
+        Integer expectedStackSizeFirstIteration = 4;
+        Integer expectedValueSecondIteration = null;
+        Integer expectedStackSizeSecondIteration = 0;
+        Integer actualValueFirstIteration = stackInteger.peek();
+        Integer actualStackSizeFirstIteration = stackInteger.getSize();
+        stackInteger.clear();
+        Integer actualValueSecondIteration = stackInteger.peek();
+        Integer actualStackSizeSecondIteration = stackInteger.getSize();
+        assertEquals(expectedValueFirstIteration, actualValueFirstIteration);
+        assertEquals(expectedStackSizeFirstIteration, actualStackSizeFirstIteration);
+        assertEquals(expectedValueSecondIteration, actualValueSecondIteration);
+        assertEquals(expectedStackSizeSecondIteration, actualStackSizeSecondIteration);
+    }
+
+    @Test
+    void clearStringStack() {
+        String expectedValueFirstIteration = "Test456";
+        Integer expectedStackSizeFirstIteration = 3;
+        String expectedValueSecondIteration = null;
+        Integer expectedStackSizeSecondIteration = 0;
+        String actualValueFirstIteration = stackString.peek();
+        Integer actualStackSizeFirstIteration = stackString.getSize();
+        stackString.clear();
+        String actualValueSecondIteration = stackString.peek();
+        Integer actualStackSizeSecondIteration = stackString.getSize();
+        assertEquals(expectedValueFirstIteration, actualValueFirstIteration);
+        assertEquals(expectedStackSizeFirstIteration, actualStackSizeFirstIteration);
+        assertEquals(expectedValueSecondIteration, actualValueSecondIteration);
+        assertEquals(expectedStackSizeSecondIteration, actualStackSizeSecondIteration);
     }
 }

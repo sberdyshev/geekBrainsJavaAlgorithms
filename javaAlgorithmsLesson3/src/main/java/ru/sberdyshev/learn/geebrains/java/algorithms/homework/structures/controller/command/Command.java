@@ -7,8 +7,10 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Objects;
 
-import static ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.controller.command.CommandType.*;
-
+/**
+ * Command representation
+ * @author sberdyshev
+ */
 public class Command {
     private final static Logger logger = LoggerFactory.getLogger(Command.class);
     @Getter
@@ -59,7 +61,6 @@ public class Command {
                 return false;
             }
         }
-
 //        return checkArgsAmount(argsAmount, type);
         if (argsAmount == type.getArgsAmount()) {
             logger.debug("Command type {}. Amount of params {}. Expected amount {}. Arguments are correct.", type, argsAmount, type.getArgsAmount());
@@ -170,7 +171,6 @@ public class Command {
 //                break;
 //        }
     }
-
 //    private boolean checkArgsAmount(int argsAmount, CommandType commandType) {
 //        if (argsAmount == commandType.getArgsAmount()) {
 //            logger.debug("Command type {}. Amount of params {}. Expected amount {}. Arguments are correct.", commandType, argsAmount, commandType.getArgsAmount());
