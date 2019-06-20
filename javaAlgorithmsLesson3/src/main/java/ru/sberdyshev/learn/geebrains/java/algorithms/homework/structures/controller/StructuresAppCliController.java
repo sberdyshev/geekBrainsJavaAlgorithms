@@ -295,24 +295,120 @@ public class StructuresAppCliController implements CLIController {
     }
 
     private void processDeleteQueue(Command command) {
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        String deleteQueueName = command.getArgAtPos(0);
+        Queue<String> removedQueue = queues.remove(deleteQueueName);
+        if (removedQueue != null) {
+            logger.debug("Queue with name \"{}\" deleted from queue list.", deleteQueueName);
+            System.out.println("Queue with name \"" + deleteQueueName + "\" deleted from queue list.");
+        } else {
+            logger.debug("Queue with name \"{}\" hasn't been found in queue list.", deleteQueueName);
+            System.out.println("Queue with name \"" + deleteQueueName + "\" hasn't been found in queue list.");
+        }
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processShowQueueList(Command command) {
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        System.out.println("-----------------------");
+        System.out.println("Queue list:");
+        System.out.println("-----------------------");
+        queues.forEach((queueName, queue) -> System.out.println(queueName));
+        System.out.println("-----------------------");
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processWriteIntoQueue(Command command) {
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        String queueName = command.getArgAtPos(0);
+        String valueToPush = command.getArgAtPos(1);
+        Queue<String> queue = queues.get(queueName);
+        if (queue != null) {
+            queue.write(valueToPush);
+            System.out.println("A value \"" + valueToPush + "\" has been pushed to queue \"" + queueName + "\".");
+        } else {
+            logger.warn("There is no queue with name \"{}\".", queueName);
+            System.out.println("There is no queue with name \"" + queueName + "\".");
+        }
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processReadFromQueue(Command command) {
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        String queueName = command.getArgAtPos(0);
+        Queue<String> queue = queues.get(queueName);
+        if (queue != null) {
+            if (queue.isEmpty()) {
+                System.out.println("Queue \"" + queueName + "\" is empty.");
+                logger.debug("Queue \"" + queueName + "\" is empty.");
+            } else {
+                String resultValue = queue.read();
+                System.out.println("Read a value from the queue \"" + queueName + "\": \"" + resultValue + "\".");
+                logger.debug("Read a value from the queue \"" + queueName + "\": \"" + resultValue + "\".");
+            }
+        } else {
+            logger.warn("There is no queue with name \"{}\".", queueName);
+            System.out.println("There is no queue with name \"" + queueName + "\".");
+        }
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processBrowseQueue(Command command) {
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        String queueName = command.getArgAtPos(0);
+        Queue<String> queue = queues.get(queueName);
+        if (queue != null) {
+            if (queue.isEmpty()) {
+                System.out.println("Queue \"" + queueName + "\" is empty.");
+                logger.debug("Queue \"" + queueName + "\" is empty.");
+            } else {
+                String resultValue = queue.browse();
+                System.out.println("Read a value from the queue \"" + queueName + "\": \"" + resultValue + "\".");
+                logger.debug("Read a value from the queue \"" + queueName + "\": \"" + resultValue + "\".");
+            }
+        } else {
+            logger.warn("There is no queue with name \"{}\".", queueName);
+            System.out.println("There is no queue with name \"" + queueName + "\".");
+        }
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processPrintQueue(Command command) {
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        String queueName = command.getArgAtPos(0);
+        Queue<String> queue = queues.get(queueName);
+        if (queue != null) {
+            if (!queue.isEmpty()) {
+                List<String> queueValues = queue.getValues();
+                System.out.println("-----------------------");
+                System.out.println("Queue \"" + queueName + "\" values:");
+                System.out.println("-----------------------");
+                for (String value : queueValues) {
+                    System.out.print(value + " ");
+                }
+                System.out.println("\r\n-----------------------");
+            } else {
+                System.out.println("Queue \"" + queueName + "\" is empty.");
+            }
+        } else {
+            logger.warn("There is no queue with name \"{}\".", queueName);
+            System.out.println("There is no queue with name \"" + queueName + "\".");
+        }
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     private void processShowQueueSize(Command command) {
+        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        String queueName = command.getArgAtPos(0);
+        Queue<String> queue = queues.get(queueName);
+        if (queue != null) {
+            int queueSize = queue.getSize();
+            System.out.println("Queue \"" + queueName + "\" has size: " + queueSize + ".");
+        } else {
+            logger.warn("There is no queue with name \"{}\".", queueName);
+            System.out.println("There is no queue with name \"" + queueName + "\".");
+        }
+        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
     }
 
     @Override
@@ -372,70 +468,6 @@ public class StructuresAppCliController implements CLIController {
         }
         return args;
     }
-//    private boolean processGetStudent(Command command) {
-//        Integer id = new Integer(command.getArgAtPos(0));
-//        try {
-//            Student student = studentDao.getEntity(id);
-//            System.out.println("Student with id \"" + student.getId() + "\", name \"" + student.getName() + "\", score \"" + student.getScore() + "\" found");
-//            logger.info("Got student with id \"{}\", name \"{}\", score \"{}\" found", student.getId(), student.getName(), student.getScore());
-//        } catch (SQLException e) {
-//            logger.error("Couldn't get student: " + e.getLocalizedMessage(), e);
-//            return false;
-//        } catch (IllegalArgumentException e) {
-//            logger.error("Couldn't get student: " + e.getLocalizedMessage(), e);
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//    private boolean processGetAllStudents() {
-//        try {
-//            List<Student> students = studentDao.getEntities();
-//            System.out.println("Got all students!");
-//            logger.info("Got all students!");
-//            for (Student student : students) {
-//                System.out.println("Student with id \"" + student.getId() + "\", name \"" + student.getName() + "\", score \"" + student.getScore() + "\" found");
-//                logger.info("Got student with id \"{}\", name \"{}\", score \"{}\" found", student.getId(), student.getName(), student.getScore());
-//            }
-//        } catch (SQLException e) {
-//            logger.error("Couldn't get students: " + e.getLocalizedMessage(), e);
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//    private boolean processAddStudent(Command command) {
-//        Integer id = new Integer(command.getArgAtPos(0));
-//        String name = command.getArgAtPos(1);
-//        Integer score = new Integer(command.getArgAtPos(2));
-//        Student student = new Student(id, name, score);
-//        try {
-//            studentDao.addEntity(student);
-//            logger.info("Student with id \"{}\", name \"{}\", score \"{}\" added", student.getId(), student.getName(), student.getScore());
-//        } catch (SQLException e) {
-//            logger.error("Couldn't add student: " + e.getLocalizedMessage(), e);
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//    private boolean processUpdateStudent(Command command) {
-//        Integer id = new Integer(command.getArgAtPos(0));
-//        String name = command.getArgAtPos(1);
-//        Integer score = new Integer(command.getArgAtPos(2));
-//        Student student = new Student(id, name, score);
-//        try {
-//            studentDao.updateEntity(student);
-//            logger.info("Student with id \"{}\" updated. New name - \"{}\", new score - \"{}\"", student.getId(), student.getName(), student.getScore());
-//        } catch (SQLException e) {
-//            logger.error("Couldn't update student: " + e.getLocalizedMessage(), e);
-//            return false;
-//        } catch (IllegalArgumentException e) {
-//            logger.error("Couldn't update student: " + e.getLocalizedMessage(), e);
-//            return false;
-//        }
-//        return true;
-//    }
 
     private void processHelp() {
         showHelpMessage();
