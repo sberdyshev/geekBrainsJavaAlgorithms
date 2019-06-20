@@ -1,8 +1,8 @@
 package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.arrays;
 
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import lombok.Getter;
 
 import java.lang.reflect.Array;
 import java.util.LinkedList;
@@ -21,9 +21,6 @@ public class ArrayHandler<T extends Comparable<T>> {
     private T[] array;
     private int currentPosition;
 
-    {
-    }
-
     /**
      * Creates an instance and initialises it
      *
@@ -31,9 +28,8 @@ public class ArrayHandler<T extends Comparable<T>> {
      * @param elements  - values to initialise the array
      */
     public ArrayHandler(Class<T> classType, T... elements) {
-        T[] array = (T[]) Array.newInstance(classType, ARRAY_MIN_LENGTH);
         this.classType = classType;
-        this.array = array;
+        this.array = (T[]) Array.newInstance(classType, ARRAY_MIN_LENGTH);
         this.currentPosition = 0;
         for (T currentElement : elements) {
             this.add(currentElement);
@@ -47,9 +43,8 @@ public class ArrayHandler<T extends Comparable<T>> {
      * @param classType - type of the elements to work with
      */
     public ArrayHandler(Class<T> classType) {
-        T[] array = (T[]) Array.newInstance(classType, ARRAY_MIN_LENGTH);
         this.classType = classType;
-        this.array = array;
+        this.array = (T[]) Array.newInstance(classType, ARRAY_MIN_LENGTH);
         this.currentPosition = 0;
         logger.info("An object has been created");
     }
@@ -85,20 +80,7 @@ public class ArrayHandler<T extends Comparable<T>> {
         logger.info("Deleting element {}", deletedElement);
         boolean result = false;
         T[] tempArray = array;
-        List<Integer> undeletedIndexes = new LinkedList<Integer>();
-        if (deletedElement == null) {
-            for (int i = 0; i < array.length; i++) {
-                if (array[i] != null) {
-                    undeletedIndexes.add(i);
-                }
-            }
-        } else {
-            for (int i = 0; i < array.length; i++) {
-                if (!deletedElement.equals(array[i])) {
-                    undeletedIndexes.add(i);
-                }
-            }
-        }
+        List<Integer> undeletedIndexes = collectUndeletedIndexes(deletedElement);
         int remainedElementAmount = undeletedIndexes.size();
         if (remainedElementAmount != tempArray.length) {
             result = true;
@@ -116,6 +98,31 @@ public class ArrayHandler<T extends Comparable<T>> {
             array = (T[]) Array.newInstance(classType, ARRAY_MIN_LENGTH);
         }
         return result;
+    }
+
+    /**
+     * Gather all indexes of elements, that won't be deleted (that are not equal to deletedElement).
+     * Method is used in delete method.
+     *
+     * @param deletedElement - element, that will be deleted
+     * @return list of element's indexes, that will be kept
+     */
+    private List<Integer> collectUndeletedIndexes(T deletedElement) {
+        List<Integer> undeletedIndexes = new LinkedList<>();
+        if (deletedElement == null) {
+            for (int i = 0; i < array.length; i++) {
+                if (array[i] != null) {
+                    undeletedIndexes.add(i);
+                }
+            }
+        } else {
+            for (int i = 0; i < array.length; i++) {
+                if (!deletedElement.equals(array[i])) {
+                    undeletedIndexes.add(i);
+                }
+            }
+        }
+        return undeletedIndexes;
     }
 
     /**
@@ -163,10 +170,8 @@ public class ArrayHandler<T extends Comparable<T>> {
             for (int j = 0; j < i; j++) {
                 if (array[j] == null && array[j + 1] != null) {
                     change(j, j + 1);
-                } else if (array[j] != null && array[j + 1] != null) {
-                    if (array[j].compareTo(array[j + 1]) > 0) {
-                        change(j, j + 1);
-                    }
+                } else if (array[j] != null && array[j + 1] != null && array[j].compareTo(array[j + 1]) > 0) {
+                    change(j, j + 1);
                 }
             }
         }
@@ -191,16 +196,16 @@ public class ArrayHandler<T extends Comparable<T>> {
      */
     public void sortSelect() {
         logger.info("Start sorting by select algorithm array [{}]", array);
-        int out, in, mark;
+        int out;
+        int in;
+        int mark;
         for (out = 0; out < array.length; out++) {
             mark = out;
             for (in = out + 1; in < array.length; in++) {
                 if (array[in] != null && array[mark] == null) {
                     mark = in;
-                } else if (array[in] != null && array[mark] != null) {
-                    if (array[in].compareTo(array[mark]) < 0) {
-                        mark = in;
-                    }
+                } else if (array[in] != null && array[mark] != null && array[in].compareTo(array[mark]) < 0) {
+                    mark = in;
                 }
             }
             change(out, mark);
@@ -214,7 +219,8 @@ public class ArrayHandler<T extends Comparable<T>> {
      */
     public void sortInsert() {
         logger.info("Start sorting by insert algorithm array [{}]", array);
-        int in, out;
+        int in;
+        int out;
         for (out = 1; out < array.length; out++) {
             T temp = array[out];
             in = out;
