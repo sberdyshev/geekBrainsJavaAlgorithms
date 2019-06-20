@@ -168,9 +168,9 @@ public class ArrayHandler<T extends Comparable<T>> {
         logger.info("Start sorting by bubble algorithm array [{}]", array);
         for (int i = array.length - 1; i >= 1; i--) {
             for (int j = 0; j < i; j++) {
-                if (array[j] == null && array[j + 1] != null) {
-                    change(j, j + 1);
-                } else if (array[j] != null && array[j + 1] != null && array[j].compareTo(array[j + 1]) > 0) {
+                boolean isNullElementStandsBeforeNotNullElement = array[j] == null && array[j + 1] != null;
+                boolean isFirstNotNullBiggerThenSecondNotNull = array[j] != null && array[j + 1] != null && array[j].compareTo(array[j + 1]) > 0;
+                if (isNullElementStandsBeforeNotNullElement || isFirstNotNullBiggerThenSecondNotNull) {
                     change(j, j + 1);
                 }
             }
@@ -202,9 +202,9 @@ public class ArrayHandler<T extends Comparable<T>> {
         for (out = 0; out < array.length; out++) {
             mark = out;
             for (in = out + 1; in < array.length; in++) {
-                if (array[in] != null && array[mark] == null) {
-                    mark = in;
-                } else if (array[in] != null && array[mark] != null && array[in].compareTo(array[mark]) < 0) {
+                boolean isCheckedElementNotNullAndMarkerNull = array[in] != null && array[mark] == null;
+                boolean isNotNullCheckedLessThenNotNullMarker = array[in] != null && array[mark] != null && array[in].compareTo(array[mark]) < 0;
+                if (isCheckedElementNotNullAndMarkerNull || isNotNullCheckedLessThenNotNullMarker) {
                     mark = in;
                 }
             }
