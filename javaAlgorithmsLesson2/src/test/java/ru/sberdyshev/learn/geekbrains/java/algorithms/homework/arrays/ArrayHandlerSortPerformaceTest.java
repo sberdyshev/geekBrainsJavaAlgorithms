@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author sberdyshev
  */
-public class ArrayHandlerBubbleSortPerformaceTest {
+public class ArrayHandlerSortPerformaceTest {
     private static final int ARRAY_SIZE = 100000;
     private static final int MAX_ARRAY_VALUE = 100;
     private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -65,7 +65,8 @@ public class ArrayHandlerBubbleSortPerformaceTest {
         String expectedResult = outContent.toString();
         bubbleTestArray.sortInsert();
         bubbleTestArray.print();
-        String result = outContent.toString();
+        String actualResult = outContent.toString();
+        assertEquals(expectedResult, actualResult);
     }
 
     @Test
@@ -74,7 +75,8 @@ public class ArrayHandlerBubbleSortPerformaceTest {
         String expectedResult = outContent.toString();
         selectTestArray.sortInsert();
         selectTestArray.print();
-        String result = outContent.toString();
+        String actualResult = outContent.toString();
+        assertEquals(expectedResult, actualResult);
     }
 
     @Test
@@ -83,6 +85,7 @@ public class ArrayHandlerBubbleSortPerformaceTest {
         String expectedResult = outContent.toString();
         insertTestArray.sortInsert();
         insertTestArray.print();
-        String result = outContent.toString();
+        String actualResult = outContent.toString();
+        assertEquals(expectedResult, actualResult);
     }
 }
