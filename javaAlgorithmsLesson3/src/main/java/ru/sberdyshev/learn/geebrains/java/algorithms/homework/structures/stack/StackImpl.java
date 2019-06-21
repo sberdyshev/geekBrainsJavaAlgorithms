@@ -1,6 +1,5 @@
 package ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.stack;
 
-import com.sun.istack.internal.Nullable;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -20,6 +19,7 @@ import java.util.List;
  */
 public class StackImpl<T> implements Stack<T> {
     private static final int STACK_MIN_SIZE = 5;
+    private static final String DEBUG_STACK_IS_EMPTY = "Stack \"{}\" is empty.";
     private static final Logger logger = LoggerFactory.getLogger(StackImpl.class);
     @NonNull
     private T[] array;
@@ -78,7 +78,6 @@ public class StackImpl<T> implements Stack<T> {
      * @return - top element of the stack
      */
     @Override
-    @Nullable
     public T pop() {
         logger.debug("Getting a top element from stack \"{}\". Current top position \"{}\".", name, topPointer);
         if (!isEmpty()) {
@@ -87,7 +86,7 @@ public class StackImpl<T> implements Stack<T> {
             logger.debug("Got top element \"{}\" from a stack \"{}\". Current top position \"{}\".", topElement, name, topPointer);
             return topElement;
         } else {
-            logger.debug("Stack \"{}\" is empty.", name);
+            logger.debug(DEBUG_STACK_IS_EMPTY, name);
             return null;
         }
     }
@@ -98,7 +97,7 @@ public class StackImpl<T> implements Stack<T> {
      * @param element - element that has to be added
      */
     @Override
-    public void push(@Nullable T element) {
+    public void push(T element) {
         logger.debug("Pushing an element \"{}\" into stack \"{}\". Current top position \"{}\".", element, name, topPointer);
         if (array.length == topPointer) {
             logger.debug("The array of stack \"{}\" is full, giving it new length - {}", name, 2 * array.length);
@@ -119,7 +118,6 @@ public class StackImpl<T> implements Stack<T> {
      * @return - top element of the stack
      */
     @Override
-    @Nullable
     public T peek() {
         logger.debug("Getting a peek element from stack \"{}\". Current top position \"{}\".", name, topPointer);
         if (!isEmpty()) {
@@ -127,7 +125,7 @@ public class StackImpl<T> implements Stack<T> {
             logger.debug("Got peek element \"{}\" from a stack \"{}\". Current top position \"{}\".", peekElement, name, topPointer);
             return array[topPointer - 1];
         } else {
-            logger.debug("Stack \"{}\" is empty.", name);
+            logger.debug(DEBUG_STACK_IS_EMPTY, name);
             return null;
         }
     }
@@ -141,7 +139,7 @@ public class StackImpl<T> implements Stack<T> {
     public boolean isEmpty() {
         logger.debug("Checking if stack \"{}\" is empty.", name);
         if (topPointer == 0) {
-            logger.debug("Stack \"{}\" is empty.", name);
+            logger.debug(DEBUG_STACK_IS_EMPTY, name);
             return true;
         } else {
             logger.debug("Stack \"{}\" is not empty.", name);
@@ -162,8 +160,7 @@ public class StackImpl<T> implements Stack<T> {
         for (int i = 0; i < topPointer; i++) {
             arrayToReturn[i] = array[i];
         }
-        List<T> stackValuesAsList = new LinkedList<>(Arrays.asList(arrayToReturn));
-        return stackValuesAsList;
+        return new LinkedList<>(Arrays.asList(arrayToReturn));
     }
 
     /**

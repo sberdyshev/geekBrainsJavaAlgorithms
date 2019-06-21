@@ -1,6 +1,5 @@
 package ru.sberdyshev.learn.geebrains.java.algorithms.homework.structures.queue;
 
-import com.sun.istack.internal.Nullable;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -20,6 +19,7 @@ import java.util.List;
  */
 public class QueueImpl<T> implements Queue<T> {
     private static final int QUEUE_MIN_SIZE = 5;
+    private static final String DEBUG_QUEUE_IS_EMPTY = "Queue \"{}\" is empty.";
     private static final Logger logger = LoggerFactory.getLogger(QueueImpl.class);
     @NonNull
     private T[] array;
@@ -34,8 +34,8 @@ public class QueueImpl<T> implements Queue<T> {
     /**
      * Creates a queue with specific type and name
      *
-     * @param classType - type of values stack contains
-     * @param name      - name of the stack
+     * @param classType - type of values queue contains
+     * @param name      - name of the queue
      */
     public QueueImpl(@NonNull Class<T> classType, @NonNull String name) {
         if (classType == null) {
@@ -54,8 +54,8 @@ public class QueueImpl<T> implements Queue<T> {
     /**
      * Creates a queue with specific type and name
      *
-     * @param classType   - type of values stack contains
-     * @param name        - name of the stack
+     * @param classType   - type of values queue contains
+     * @param name        - name of the queue
      * @param startValues - values to fill the queue
      */
     public QueueImpl(@NonNull Class<T> classType, @NonNull String name, T... startValues) {
@@ -81,7 +81,6 @@ public class QueueImpl<T> implements Queue<T> {
      * @return queued element. if queue is empty, returns null.
      */
     @Override
-    @Nullable
     public T read() {
         logger.debug("Reading queue \"{}\". Current head position \"{}\", current tail position \"{}\".", name, headPointer, tailPointer);
         if (!isEmpty()) {
@@ -90,7 +89,7 @@ public class QueueImpl<T> implements Queue<T> {
             logger.debug("Read a value \"{}\" from queue \"{}\". Current head position \"{}\", current tail position \"{}\".", lastElement, name, headPointer, tailPointer);
             return lastElement;
         } else {
-            logger.debug("Queue \"{}\" is empty.", name);
+            logger.debug(DEBUG_QUEUE_IS_EMPTY, name);
             return null;
         }
     }
@@ -101,7 +100,6 @@ public class QueueImpl<T> implements Queue<T> {
      * @return queued element. if queue is empty, returns null.
      */
     @Override
-    @Nullable
     public T browse() {
         logger.debug("Browsing queue \"{}\". Current head position \"{}\", current tail position \"{}\".", name, headPointer, tailPointer);
         if (!isEmpty()) {
@@ -109,7 +107,7 @@ public class QueueImpl<T> implements Queue<T> {
             logger.debug("Browsed a value \"{}\" from queue \"{}\". Current head position \"{}\", current tail position \"{}\".", lastElement, name, headPointer, tailPointer);
             return lastElement;
         } else {
-            logger.debug("Queue \"{}\" is empty.", name);
+            logger.debug(DEBUG_QUEUE_IS_EMPTY, name);
             return null;
         }
     }
@@ -120,7 +118,7 @@ public class QueueImpl<T> implements Queue<T> {
      * @param element - element that has to be added
      */
     @Override
-    public void write(@Nullable T element) {
+    public void write(T element) {
         logger.debug("Writing an element \"{}\" into queue \"{}\". Current top position \"{}\", current tail position \"{}\".", element, name, headPointer, tailPointer);
         if (array.length == headPointer) {
             int queueDepth = headPointer - tailPointer;
@@ -147,7 +145,7 @@ public class QueueImpl<T> implements Queue<T> {
     public boolean isEmpty() {
         logger.debug("Checking if queue \"{}\" is empty.", name);
         if (headPointer == 0 || headPointer == tailPointer) {
-            logger.debug("Queue \"{}\" is empty.", name);
+            logger.debug(DEBUG_QUEUE_IS_EMPTY, name);
             return true;
         } else {
             logger.debug("Queue \"{}\" is not empty.", name);
@@ -168,8 +166,7 @@ public class QueueImpl<T> implements Queue<T> {
         for (int i = tailPointer; i < headPointer; i++) {
             arrayToReturn[i - tailPointer] = array[i];
         }
-        List<T> stackValuesAsList = new LinkedList<>(Arrays.asList(arrayToReturn));
-        return stackValuesAsList;
+        return new LinkedList<>(Arrays.asList(arrayToReturn));
     }
 
     /**

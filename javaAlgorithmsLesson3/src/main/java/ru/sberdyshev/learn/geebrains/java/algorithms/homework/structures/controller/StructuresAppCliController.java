@@ -15,10 +15,16 @@ import java.util.*;
  * @author sberdyshev
  */
 public class StructuresAppCliController implements CLIController {
-    private final static Logger logger = LoggerFactory.getLogger(StructuresAppCliController.class);
+    private static final Logger logger = LoggerFactory.getLogger(StructuresAppCliController.class);
     private final int maxTryCount;
     private final Map<String, Stack<String>> stacks;
     private final Map<String, Queue<String>> queues;
+    private static final String PROCESSING_METHOD_START_DEBUG = "Processing \"{}\"";
+    private static final String PROCESSING_METHOD_END_DEBUG = "Processed \"{}\"";
+    private static final String PROCESSING_METHOD_OUTPUT_SEPARATOR = "-----------------------";
+    private static final String PROCESSIN_METHOD_NO_STACK_WARNING = "There is no stack with name \"{}\".";
+    private static final String PROCESSIN_METHOD_NO_QUEUE_WARNING = "There is no queue with name \"{}\".";
+
 
     public StructuresAppCliController(int maxTryCount) {
         this.maxTryCount = maxTryCount;
@@ -27,7 +33,7 @@ public class StructuresAppCliController implements CLIController {
     }
 
     @Override
-    public void start() throws IllegalStateException {
+    public void start() {
         logger.debug("StructuresAppCliController started");
         Scanner scanner = new Scanner(System.in);
         boolean isExit = false;
@@ -149,7 +155,7 @@ public class StructuresAppCliController implements CLIController {
     }
 
     private void processCreateStack(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String newStackName = command.getArgAtPos(0);
         if (stacks.containsKey(newStackName)) {
             logger.warn("Stack list already has \"{}\" stack. Try deleting it first. Aborting.", newStackName);
@@ -160,11 +166,11 @@ public class StructuresAppCliController implements CLIController {
             logger.debug("Stack with name \"{}\" added to stack list.", newStackName);
             System.out.println("Stack with name \"" + newStackName + "\" added to stack list.");
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processDeleteStack(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String deleteStackName = command.getArgAtPos(0);
         Stack<String> removedStack = stacks.remove(deleteStackName);
         if (removedStack != null) {
@@ -174,21 +180,21 @@ public class StructuresAppCliController implements CLIController {
             logger.debug("Stack with name \"{}\" hasn't been found in stack list.", deleteStackName);
             System.out.println("Stack with name \"" + deleteStackName + "\" hasn't been found in stack list.");
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processShowStackList(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
-        System.out.println("-----------------------");
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
+        System.out.println(PROCESSING_METHOD_OUTPUT_SEPARATOR);
         System.out.println("Stack list:");
-        System.out.println("-----------------------");
+        System.out.println(PROCESSING_METHOD_OUTPUT_SEPARATOR);
         stacks.forEach((stackName, stack) -> System.out.println(stackName));
-        System.out.println("-----------------------");
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        System.out.println(PROCESSING_METHOD_OUTPUT_SEPARATOR);
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processPushIntoStack(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String stackName = command.getArgAtPos(0);
         String valueToPush = command.getArgAtPos(1);
         Stack<String> stack = stacks.get(stackName);
@@ -196,14 +202,14 @@ public class StructuresAppCliController implements CLIController {
             stack.push(valueToPush);
             System.out.println("A value \"" + valueToPush + "\" has been pushed to stack \"" + stackName + "\".");
         } else {
-            logger.warn("There is no stack with name \"{}\".", stackName);
+            logger.warn(PROCESSIN_METHOD_NO_STACK_WARNING, stackName);
             System.out.println("There is no stack with name \"" + stackName + "\".");
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processPopFromStack(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String stackName = command.getArgAtPos(0);
         Stack<String> stack = stacks.get(stackName);
         if (stack != null) {
@@ -216,14 +222,14 @@ public class StructuresAppCliController implements CLIController {
                 logger.debug("Read a value from the stack \"" + stackName + "\": \"" + resultValue + "\".");
             }
         } else {
-            logger.warn("There is no stack with name \"{}\".", stackName);
+            logger.warn(PROCESSIN_METHOD_NO_STACK_WARNING, stackName);
             System.out.println("There is no stack with name \"" + stackName + "\".");
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processPeekInStack(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String stackName = command.getArgAtPos(0);
         Stack<String> stack = stacks.get(stackName);
         if (stack != null) {
@@ -236,22 +242,22 @@ public class StructuresAppCliController implements CLIController {
                 logger.debug("Read a value from the stack \"" + stackName + "\": \"" + resultValue + "\".");
             }
         } else {
-            logger.warn("There is no stack with name \"{}\".", stackName);
+            logger.warn(PROCESSIN_METHOD_NO_STACK_WARNING, stackName);
             System.out.println("There is no stack with name \"" + stackName + "\".");
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processPrintStack(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String stackName = command.getArgAtPos(0);
         Stack<String> stack = stacks.get(stackName);
         if (stack != null) {
             if (!stack.isEmpty()) {
                 List<String> stackValues = stack.getValues();
-                System.out.println("-----------------------");
+                System.out.println(PROCESSING_METHOD_OUTPUT_SEPARATOR);
                 System.out.println("Stack \"" + stackName + "\" values:");
-                System.out.println("-----------------------");
+                System.out.println(PROCESSING_METHOD_OUTPUT_SEPARATOR);
                 for (String value : stackValues) {
                     System.out.print(value + " ");
                 }
@@ -260,28 +266,28 @@ public class StructuresAppCliController implements CLIController {
                 System.out.println("Stack \"" + stackName + "\" is empty.");
             }
         } else {
-            logger.warn("There is no stack with name \"{}\".", stackName);
+            logger.warn(PROCESSIN_METHOD_NO_STACK_WARNING, stackName);
             System.out.println("There is no stack with name \"" + stackName + "\".");
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processShowStackSize(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String stackName = command.getArgAtPos(0);
         Stack<String> stack = stacks.get(stackName);
         if (stack != null) {
             int stackSize = stack.getSize();
             System.out.println("Stack \"" + stackName + "\" has size: " + stackSize + ".");
         } else {
-            logger.warn("There is no stack with name \"{}\".", stackName);
+            logger.warn(PROCESSIN_METHOD_NO_STACK_WARNING, stackName);
             System.out.println("There is no stack with name \"" + stackName + "\".");
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processCreateQueue(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String newQueueName = command.getArgAtPos(0);
         if (queues.containsKey(newQueueName)) {
             logger.warn("Queue list already has \"{}\" queue. Try deleting it first. Aborting.", newQueueName);
@@ -291,11 +297,11 @@ public class StructuresAppCliController implements CLIController {
             queues.put(newQueueName, newQueue);
             logger.debug("Queue with name \"{}\" added to queue list.", newQueueName);
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processDeleteQueue(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String deleteQueueName = command.getArgAtPos(0);
         Queue<String> removedQueue = queues.remove(deleteQueueName);
         if (removedQueue != null) {
@@ -305,21 +311,21 @@ public class StructuresAppCliController implements CLIController {
             logger.debug("Queue with name \"{}\" hasn't been found in queue list.", deleteQueueName);
             System.out.println("Queue with name \"" + deleteQueueName + "\" hasn't been found in queue list.");
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processShowQueueList(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
-        System.out.println("-----------------------");
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
+        System.out.println(PROCESSING_METHOD_OUTPUT_SEPARATOR);
         System.out.println("Queue list:");
-        System.out.println("-----------------------");
+        System.out.println(PROCESSING_METHOD_OUTPUT_SEPARATOR);
         queues.forEach((queueName, queue) -> System.out.println(queueName));
-        System.out.println("-----------------------");
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        System.out.println(PROCESSING_METHOD_OUTPUT_SEPARATOR);
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processWriteIntoQueue(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String queueName = command.getArgAtPos(0);
         String valueToPush = command.getArgAtPos(1);
         Queue<String> queue = queues.get(queueName);
@@ -327,14 +333,14 @@ public class StructuresAppCliController implements CLIController {
             queue.write(valueToPush);
             System.out.println("A value \"" + valueToPush + "\" has been pushed to queue \"" + queueName + "\".");
         } else {
-            logger.warn("There is no queue with name \"{}\".", queueName);
+            logger.warn(PROCESSIN_METHOD_NO_QUEUE_WARNING, queueName);
             System.out.println("There is no queue with name \"" + queueName + "\".");
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processReadFromQueue(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String queueName = command.getArgAtPos(0);
         Queue<String> queue = queues.get(queueName);
         if (queue != null) {
@@ -347,14 +353,14 @@ public class StructuresAppCliController implements CLIController {
                 logger.debug("Read a value from the queue \"" + queueName + "\": \"" + resultValue + "\".");
             }
         } else {
-            logger.warn("There is no queue with name \"{}\".", queueName);
+            logger.warn(PROCESSIN_METHOD_NO_QUEUE_WARNING, queueName);
             System.out.println("There is no queue with name \"" + queueName + "\".");
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processBrowseQueue(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String queueName = command.getArgAtPos(0);
         Queue<String> queue = queues.get(queueName);
         if (queue != null) {
@@ -367,22 +373,22 @@ public class StructuresAppCliController implements CLIController {
                 logger.debug("Read a value from the queue \"" + queueName + "\": \"" + resultValue + "\".");
             }
         } else {
-            logger.warn("There is no queue with name \"{}\".", queueName);
+            logger.warn(PROCESSIN_METHOD_NO_QUEUE_WARNING, queueName);
             System.out.println("There is no queue with name \"" + queueName + "\".");
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processPrintQueue(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String queueName = command.getArgAtPos(0);
         Queue<String> queue = queues.get(queueName);
         if (queue != null) {
             if (!queue.isEmpty()) {
                 List<String> queueValues = queue.getValues();
-                System.out.println("-----------------------");
+                System.out.println(PROCESSING_METHOD_OUTPUT_SEPARATOR);
                 System.out.println("Queue \"" + queueName + "\" values:");
-                System.out.println("-----------------------");
+                System.out.println(PROCESSING_METHOD_OUTPUT_SEPARATOR);
                 for (String value : queueValues) {
                     System.out.print(value + " ");
                 }
@@ -391,24 +397,24 @@ public class StructuresAppCliController implements CLIController {
                 System.out.println("Queue \"" + queueName + "\" is empty.");
             }
         } else {
-            logger.warn("There is no queue with name \"{}\".", queueName);
+            logger.warn(PROCESSIN_METHOD_NO_QUEUE_WARNING, queueName);
             System.out.println("There is no queue with name \"" + queueName + "\".");
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     private void processShowQueueSize(Command command) {
-        logger.debug("Processing \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_START_DEBUG, command.getType().getCommandShortDescr());
         String queueName = command.getArgAtPos(0);
         Queue<String> queue = queues.get(queueName);
         if (queue != null) {
             int queueSize = queue.getSize();
             System.out.println("Queue \"" + queueName + "\" has size: " + queueSize + ".");
         } else {
-            logger.warn("There is no queue with name \"{}\".", queueName);
+            logger.warn(PROCESSIN_METHOD_NO_QUEUE_WARNING, queueName);
             System.out.println("There is no queue with name \"" + queueName + "\".");
         }
-        logger.debug("Processed \"{}\"", command.getType().getCommandShortDescr());
+        logger.debug(PROCESSING_METHOD_END_DEBUG, command.getType().getCommandShortDescr());
     }
 
     @Override

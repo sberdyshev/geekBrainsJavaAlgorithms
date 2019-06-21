@@ -31,7 +31,7 @@ public enum CommandType {
     EXIT("/exit", "exit","Exit. Format - \"/exit\".", 0),
     NONE(null, null,null, 0);
 
-    private final static Logger logger = LoggerFactory.getLogger(CommandType.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommandType.class);
     @Getter
     private String command;
     @Getter
