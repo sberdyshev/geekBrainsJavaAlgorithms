@@ -10,12 +10,13 @@ import java.io.PrintStream;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * @author sberdyshev
  */
 public class ArrayHandlerSortPerformaceTest {
-    private static final int ARRAY_SIZE = 100000;
+    private static final int ARRAY_SIZE = 10000;
     private static final int MAX_ARRAY_VALUE = 100;
     private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private static final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
@@ -47,7 +48,7 @@ public class ArrayHandlerSortPerformaceTest {
 
     private static Integer[] generateArray() {
         Integer[] array = new Integer[ARRAY_SIZE];
-        Random random = new Random();
+        Random random = new Random(MAX_ARRAY_VALUE);
         for (int i = 0; i < ARRAY_SIZE; i++) {
             array[i] = random.nextInt();
         }
@@ -66,7 +67,7 @@ public class ArrayHandlerSortPerformaceTest {
         bubbleTestArray.sortInsert();
         bubbleTestArray.print();
         String actualResult = outContent.toString();
-        assertEquals(expectedResult, actualResult);
+        assertNotEquals(expectedResult, actualResult);
     }
 
     @Test
@@ -76,7 +77,7 @@ public class ArrayHandlerSortPerformaceTest {
         selectTestArray.sortInsert();
         selectTestArray.print();
         String actualResult = outContent.toString();
-        assertEquals(expectedResult, actualResult);
+        assertNotEquals(expectedResult, actualResult);
     }
 
     @Test
@@ -86,6 +87,6 @@ public class ArrayHandlerSortPerformaceTest {
         insertTestArray.sortInsert();
         insertTestArray.print();
         String actualResult = outContent.toString();
-        assertEquals(expectedResult, actualResult);
+        assertNotEquals(expectedResult, actualResult);
     }
 }
