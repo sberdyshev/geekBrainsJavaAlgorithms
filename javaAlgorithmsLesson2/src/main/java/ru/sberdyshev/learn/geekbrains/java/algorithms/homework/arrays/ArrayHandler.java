@@ -1,6 +1,5 @@
 package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.arrays;
 
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +16,6 @@ public class ArrayHandler<T extends Comparable<T>> {
     private static final Logger logger = LoggerFactory.getLogger(ArrayHandler.class);
     private static final int ARRAY_MIN_LENGTH = 5;
     private final Class<T> classType;
-    @Getter
     private T[] array;
     private int currentPosition;
 
@@ -27,6 +25,7 @@ public class ArrayHandler<T extends Comparable<T>> {
      * @param classType - type of the elements to work with
      * @param elements  - values to initialise the array
      */
+    @SuppressWarnings("unchecked")
     public ArrayHandler(Class<T> classType, T... elements) {
         this.classType = classType;
         this.array = (T[]) Array.newInstance(classType, ARRAY_MIN_LENGTH);
@@ -42,6 +41,7 @@ public class ArrayHandler<T extends Comparable<T>> {
      *
      * @param classType - type of the elements to work with
      */
+    @SuppressWarnings("unchecked")
     public ArrayHandler(Class<T> classType) {
         this.classType = classType;
         this.array = (T[]) Array.newInstance(classType, ARRAY_MIN_LENGTH);
@@ -50,11 +50,21 @@ public class ArrayHandler<T extends Comparable<T>> {
     }
 
     /**
+     * Returns an underlying array
+     *
+     * @return T[]
+     */
+    public T[] getArray() {
+        return array;
+    }
+
+    /**
      * Adds an element to the array
      *
      * @param addedElement - element (weather a value or mull) that has to be added
      * @return true if there was an addition, false in other case
      */
+    @SuppressWarnings("unchecked")
     public boolean add(T addedElement) {
         logger.info("Adding element {}", addedElement);
         if (array.length == currentPosition) {
@@ -76,6 +86,7 @@ public class ArrayHandler<T extends Comparable<T>> {
      * @param deletedElement - element (weather a value or mull) that has to be deleted
      * @return true if there was a deletion, false in other case
      */
+    @SuppressWarnings("unchecked")
     public boolean delete(T deletedElement) {
         logger.info("Deleting element {}", deletedElement);
         boolean result = false;
