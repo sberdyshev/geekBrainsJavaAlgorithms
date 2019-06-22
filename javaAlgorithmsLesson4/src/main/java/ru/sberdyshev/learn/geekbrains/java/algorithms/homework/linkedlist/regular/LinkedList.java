@@ -1,17 +1,16 @@
 package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.regular;
 
-import ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.List;
-import ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.link.Link;
-import ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.link.LinkImpl;
+import ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.regular.link.Link;
+import ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.regular.link.LinkImpl;
 
-public class LinkedListRegular<T> implements List<T> {
+public class LinkedList<T> implements List<T> {
     private Link<T> first;
 
-    public LinkedListRegular() {
+    public LinkedList() {
         this.first = null;
     }
 
-    public LinkedListRegular(T... elements) {
+    public LinkedList(T... elements) {
         for (T element : elements) {
             insert(element);
         }

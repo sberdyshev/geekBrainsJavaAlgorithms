@@ -2,18 +2,17 @@ package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.regul
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class LinkedListRegularTest {
+class LinkedListTest {
     private List<String> emptyList;
     private List<Integer> filledList;
 
     @BeforeEach
     void setUp() {
-        emptyList = new LinkedListRegular<>();
-        filledList = new LinkedListRegular<>(1, 2, 3, 4);
+        emptyList = new LinkedList<>();
+        filledList = new LinkedList<>(1, 2, 3, 4);
     }
 
     @Test

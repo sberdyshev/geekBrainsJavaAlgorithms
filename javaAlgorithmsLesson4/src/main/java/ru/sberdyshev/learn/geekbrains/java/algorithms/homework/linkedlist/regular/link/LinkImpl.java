@@ -1,4 +1,4 @@
-package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.link;
+package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.regular.link;
 
 public class LinkImpl<T> implements Link<T> {
 

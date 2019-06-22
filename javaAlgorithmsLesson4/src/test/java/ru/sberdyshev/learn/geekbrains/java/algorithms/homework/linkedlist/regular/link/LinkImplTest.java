@@ -1,4 +1,4 @@
-package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.link;
+package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.regular.link;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

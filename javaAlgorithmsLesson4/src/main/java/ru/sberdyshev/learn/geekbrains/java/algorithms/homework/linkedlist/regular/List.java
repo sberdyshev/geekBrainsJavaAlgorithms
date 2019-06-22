@@ -1,4 +1,4 @@
-package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist;
+package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.regular;
 
 /**
  * Represents a list
