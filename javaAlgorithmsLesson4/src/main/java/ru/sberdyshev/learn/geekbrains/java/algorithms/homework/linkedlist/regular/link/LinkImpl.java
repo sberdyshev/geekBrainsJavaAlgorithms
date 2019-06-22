@@ -1,5 +1,6 @@
 package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.regular.link;
-
+//todo add logger
+//todo add javadoc
 public class LinkImpl<T> implements Link<T> {
 
     private T object;

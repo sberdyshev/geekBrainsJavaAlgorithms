@@ -2,7 +2,8 @@ package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.regul
 
 import ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.regular.link.Link;
 import ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.regular.link.LinkImpl;
-
+//todo add logger
+//todo add javadoc
 public class LinkedList<T> implements List<T> {
     private Link<T> first;
 

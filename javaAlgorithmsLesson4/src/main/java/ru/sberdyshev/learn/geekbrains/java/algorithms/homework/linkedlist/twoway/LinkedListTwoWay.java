@@ -2,7 +2,8 @@ package ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.twowa
 
 import ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.twoway.link.Link;
 import ru.sberdyshev.learn.geekbrains.java.algorithms.homework.linkedlist.twoway.link.LinkImpl;
-
+//todo add logger
+//todo add javadoc
 public class LinkedListTwoWay<T> implements ListTwoWays<T> {
     private Link<T> head;
     private Link<T> tail;
