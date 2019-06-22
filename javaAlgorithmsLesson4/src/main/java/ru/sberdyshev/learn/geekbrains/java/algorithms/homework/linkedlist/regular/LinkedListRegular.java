@@ -19,23 +19,19 @@ public class LinkedListRegular<T> implements List<T> {
 
     @Override
     public boolean isEmpty() {
-        if (first == null) {
-            return true;
-        } else {
-            return false;
-        }
+        return first == null;
     }
 
     @Override
     public void insert(T element) {
-        Link<T> newElement = new LinkImpl<T>(element);
+        Link<T> newElement = new LinkImpl<>(element);
         newElement.setNext(first);
         first = newElement;
     }
 
     @Override
     public T delete() {
-        if (first != null) {
+        if (!isEmpty()) {
             Link<T> deletedElement = first;
             first = first.getNext();
             return deletedElement.getObject();
@@ -46,7 +42,7 @@ public class LinkedListRegular<T> implements List<T> {
 
     @Override
     public T get() {
-        if (first != null) {
+        if (!isEmpty()) {
             return first.getObject();
         } else {
             return null;

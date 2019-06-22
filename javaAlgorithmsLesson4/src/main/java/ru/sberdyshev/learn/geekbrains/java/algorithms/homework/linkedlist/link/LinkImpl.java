@@ -16,11 +16,7 @@ public class LinkImpl<T> implements Link<T> {
 
     @Override
     public boolean hasNext() {
-        if (next != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return next != null;
     }
 
     @Override
