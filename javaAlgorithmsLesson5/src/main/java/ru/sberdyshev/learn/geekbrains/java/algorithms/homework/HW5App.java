@@ -11,5 +11,9 @@ public class HW5App {
         System.out.println(RaiseToAPower.process(6, 1));
         System.out.println(RaiseToAPower.process(2, -1));
         System.out.println(RaiseToAPower.process(2, -2));
+        System.out.println(RaiseToAPower.process(-2, -1));
+        System.out.println(RaiseToAPower.process(-2, -2));
+        System.out.println(RaiseToAPower.process(-2, 2));
+        System.out.println(RaiseToAPower.process(-2, 5));
     }
 }
