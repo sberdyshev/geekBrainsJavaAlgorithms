@@ -36,12 +36,11 @@ public class BackpackApp {
     private static void processBackpackOptions(int maxWeight, List<Item> allItems) {
         Backpack backpack = new Backpack(maxWeight);
         List<Backpack> optimalBackpackOptions = backpack.getOptimalBackpackOptions(allItems);
-        System.out.println("-------------------------------------------------------");
         System.out.println("For a backpack with weight \"" + maxWeight + "\" optimal options are:");
         System.out.println("-------------------------------------------------------");
-        int i = 1;
+        int optionNumber = 0;
         for (Backpack optimalBackpack : optimalBackpackOptions) {
-            System.out.println("Option #" + i);
+            System.out.println("Option #" + ++optionNumber);
             System.out.println("*****");
             for (Item item : optimalBackpack.getItemsInBag()) {
                 System.out.println(item.getName());

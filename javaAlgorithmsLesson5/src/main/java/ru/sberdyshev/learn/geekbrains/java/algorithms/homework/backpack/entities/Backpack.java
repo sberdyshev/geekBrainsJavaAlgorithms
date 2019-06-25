@@ -45,7 +45,8 @@ public class Backpack {
         return itemsWeight <= maxWeight;
     }
 
-    private void gatherOptions(int readElement, List<Item> allItems, List<Item> usedItems, List<Backpack> options) {
+    private int gatherOptions(int readElement, List<Item> allItems, List<Item> usedItems, List<Backpack> options) {
+        int amountOfCalls = 1;
         for (int i = readElement; i < allItems.size(); i++) {
             Item item = allItems.get(i);
             readElement += 1;
@@ -54,14 +55,18 @@ public class Backpack {
             Backpack option = new Backpack(maxWeight);
             option.addItems(newUsedItems);
             options.add(option);
-            gatherOptions(readElement, allItems, newUsedItems, options);
+            amountOfCalls += gatherOptions(readElement, allItems, newUsedItems, options);
         }
+        return amountOfCalls;
     }
 
     public List<Backpack> getOptimalBackpackOptions(List<Item> possibleItems) {
         List<Backpack> options = new LinkedList<>();
         List<Item> usedItems = new ArrayList<>();
-        gatherOptions(0, possibleItems, usedItems, options);
+        Integer amountOfCalls = gatherOptions(0, possibleItems, usedItems, options);
+        System.out.println("-------------------------------------------------------");
+        System.out.println("For a backpack with weight \"" + maxWeight + "\" made " + amountOfCalls + " function calls.");
+        System.out.println("For a backpack with weight \"" + maxWeight + "\" there are " + options.size() + " options.");
         List<Backpack> theMostExpensiveOptions = new LinkedList<>();
         Backpack theMostExpensiveOption = new Backpack(0);
         for (Backpack currentOption : options) {
