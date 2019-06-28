@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Random;
 
 public class TreeApp {
-    private static int MAX_TREE_DEPTH = 3;
-    private static int AMOUNT_OF_TREES = 1;
+    private static int MAX_TREE_DEPTH = 6;
+    private static int AMOUNT_OF_TREES = 20;
     private static int MIN_VALUE_FOR_TREE_NODE = -100;
     private static int MAX_VALUE_FOR_TREE_NODE = 100;
     private static float PERCENT_OF_DEPTH_TO_CHECK_BALANCE_OF_A_TREE = 30f;
-    private static int MAX_DIFFERENCE_BETWEEN_AMOUNT_OF_ELEMENTS_FOR_BALANCED_TREES = Math.round(MAX_TREE_DEPTH*PERCENT_OF_DEPTH_TO_CHECK_BALANCE_OF_A_TREE/100);
+    private static int MAX_DIFFERENCE_BETWEEN_AMOUNT_OF_ELEMENTS_FOR_BALANCED_TREES = Math.round(MAX_TREE_DEPTH * PERCENT_OF_DEPTH_TO_CHECK_BALANCE_OF_A_TREE / 100);
+    private static String DELIMETER_TREES = ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::";
+    private static String DELIMETER_ELEMENT_BLOCKS = "-------------------------------------------";
 
     public static void main(String[] args) {
         List<Node> treeRoots = new LinkedList<>();
@@ -30,11 +32,11 @@ public class TreeApp {
         System.out.print("Из них сбалансированных ");
         System.out.print(amountOfBalancedTrees + " (" + (amountOfBalancedTrees * 100 / AMOUNT_OF_TREES) + "%)");
         System.out.println(", несбалансированных " + amountOfUnBalancedTrees + " (" + (amountOfUnBalancedTrees * 100 / AMOUNT_OF_TREES) + "%)");
-        System.out.println("(дерево является сбалансированным, если количество ветвей справа и слева от корня равно или разница не превышает "+PERCENT_OF_DEPTH_TO_CHECK_BALANCE_OF_A_TREE+"% от глубины дерева - "+PERCENT_OF_DEPTH_TO_CHECK_BALANCE_OF_A_TREE+"% от " + MAX_TREE_DEPTH + " = " + MAX_DIFFERENCE_BETWEEN_AMOUNT_OF_ELEMENTS_FOR_BALANCED_TREES+")");
+        System.out.println("(дерево является сбалансированным, если количество ветвей справа и слева от корня равно или разница не превышает " + ((int) PERCENT_OF_DEPTH_TO_CHECK_BALANCE_OF_A_TREE) + "% от глубины дерева - " + ((int) PERCENT_OF_DEPTH_TO_CHECK_BALANCE_OF_A_TREE) + "% от " + MAX_TREE_DEPTH + " = " + MAX_DIFFERENCE_BETWEEN_AMOUNT_OF_ELEMENTS_FOR_BALANCED_TREES + ")");
         int treeNumber = 0;
         for (Node rootNode : treeRoots) {
             treeNumber++;
-            System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+            System.out.println(DELIMETER_TREES);
             System.out.println("Дерево номер " + treeNumber);
             System.out.println("Общее количество элементов: " + countTreeElements(rootNode));
             System.out.println("Элементов справа от корня: " + (rootNode.getRightChild() != null ? countTreeElements(rootNode.getRightChild()) : "0"));
@@ -44,7 +46,8 @@ public class TreeApp {
             } else {
                 System.out.println("Дерево не сбалансировано");
             }
-            System.out.println("-------------------------------------------");
+            System.out.println(DELIMETER_ELEMENT_BLOCKS);
+            System.out.println("Элементы:");
             printTree(rootNode, null);
         }
     }
@@ -108,7 +111,7 @@ public class TreeApp {
         Node rootNode = new Node(NodeType.ROOT, generateValueForANode());
         int baseTreeLevel = 1;
         int subTreeLevel = 0;
-        while (subTreeLevel < MAX_TREE_DEPTH-baseTreeLevel) {
+        while (subTreeLevel < MAX_TREE_DEPTH - baseTreeLevel) {
             subTreeLevel = insertNodeInATree(rootNode, new Node(NodeType.NONE, generateValueForANode()));
         }
         return rootNode;
